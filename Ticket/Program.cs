@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
+using Ticket.BLL;
 using Ticket.DAL;
-using Ticket.Data;
+//using Ticket.Data;
 
 namespace Ticket
 {
@@ -19,7 +20,7 @@ namespace Ticket
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
-            builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddScoped<TicketsBLL>();
 
             var app = builder.Build();
 
