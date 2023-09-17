@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Ticket.BLL;
 using Ticket.DAL;
-using Ticket.Data;
+//using Ticket.Data;
 
 namespace Ticket
 {
