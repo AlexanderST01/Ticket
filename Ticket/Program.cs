@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Ticket.BLL;
 using Ticket.DAL;
-//using Ticket.Data;
+using Ticket.Data;
 
 namespace Ticket
 {
@@ -16,11 +16,14 @@ namespace Ticket
             var ConStr = builder.Configuration.GetConnectionString("ConStr");
 
             builder.Services.AddDbContext<Contexts>(options => options.UseSqlite(ConStr));
+            builder.Services.AddScoped<TicketsBLL>();
+            builder.Services.AddScoped<PrioridadesBLL>();
+            builder.Services.AddScoped<SistemasBLL>();
+            builder.Services.AddScoped<ClientesBLL>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
-            builder.Services.AddScoped<TicketsBLL>();
 
             var app = builder.Build();
 
