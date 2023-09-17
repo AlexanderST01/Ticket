@@ -9,7 +9,7 @@ namespace Ticket.DAL
         DbSet<Clientes> Clientes { set; get; }
         DbSet<Prioridades> Prioridades { set; get; }
         DbSet<Sistemas> Sistemas { set; get; }
-        public Contexts(DbContextOptions<Contexts> options): base(options)
+        public Contexts(DbContextOptions<Contexts> options) : base(options)
         { }
     }
 }
