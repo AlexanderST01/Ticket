@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
+using Ticket.DAL;
 using Ticket.Data;
 
 namespace Ticket
@@ -9,6 +11,10 @@ namespace Ticket
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var ConStr = builder.Configuration.GetConnectionString("ConStr");
+
+            builder.Services.AddDbContext<Contexts>(options => options.UseSqlite(ConStr));
 
             // Add services to the container.
             builder.Services.AddRazorPages();
