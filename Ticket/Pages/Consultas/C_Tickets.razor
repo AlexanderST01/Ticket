@@ -1,0 +1,69 @@
+﻿@page "/ConsultaTicket"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject TicketsBLL TicketBLL
+
+<div>
+    <h3>Consulta Tickets</h3>
+    <div class="row justify-content-start ">
+        <div class=" col-sm-7 col-md-7 col-lg-10 col-xl-xxl-9 ">
+            <div class="input-group" >
+                <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
+                <button type="button" class="btn btn-outline-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                <button type="button" class="btn btn-outline-primary oi oi-reload" @onclick="Reiniciar"></button>
+            </div>
+            <div class="table-responsive ">
+                <table border="1" class="table table-bordered table-striped ">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th scope="col">ID</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Cliente ID</th>
+                            <th scope="col">Sistema ID</th>
+                            <th scope="col">Prioridad ID</th>
+                            <th scope="col">Solicitado por</th>
+                            <th scope="col">Asunto</th>
+                            <th scope="col">Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tabla in Ticket)
+                        {
+                            <tr>
+                                <td scope="row">@tabla.TicketId</td>
+                                <td scope="row">@tabla.Fecha.Day/@tabla.Fecha.Month/@tabla.Fecha.Year</td>
+                                <td scope="row"><a href="RegistroCliente/@tabla.ClienteId"></a>@tabla.ClienteId</td>
+                                <td scope="row">@tabla.SistemaId</td>
+                                <td scope="row">@tabla.PrioridadId</td>
+                                <td scope="row">@tabla.SolicitadoPor</td>
+                                <td scope="row">@tabla.Asunto</td>
+                                <td scope="row">@tabla.Descripcion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Tickets> Ticket { get; set; } = new List<Tickets>();
+
+    public int ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Ticket = TicketBLL.GetList(g => true);
+    }
+
+    public void Buscar()
+    {
+        Ticket = TicketBLL.GetList(l => l.ClienteId == ID);
+    }
+
+    public void Reiniciar()
+    {
+        Ticket = TicketBLL.GetList(l => true);
+    }
+}

@@ -1,0 +1,59 @@
+﻿@page "/ConsultaPrioridades"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject PrioridadesBLL PrioridadeBLL
+<div>
+    <h3>Consulta Prioridades</h3>
+    <div class="row justify-content-start ">
+        <div class=" col-sm-5 col-md-6 col-lg-7 col-xl-xxl-8 ">
+            <div class="input-group">
+                <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
+                <button type="button" class="btn btn-outline-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                <button type="button" class="btn btn-outline-primary oi oi-reload" @onclick="Reiniciar"></button>
+            </div>
+            <div class="table-responsive ">
+                <table border="1" class="table table-bordered table-striped ">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th>ID</th>
+                            <th>Descripcion</th>
+                            <th>Dias compromiso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tabla in prioridades)
+                        {
+                            <tr>
+                                <td>@tabla.PrioridadId</td>
+                                <td>@tabla.Descripcion</td>
+                                <td>@tabla.DiasCompromiso</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public List<Prioridades> prioridades { get; set; } = new List<Prioridades>();
+
+    public int ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        prioridades = PrioridadeBLL.GetList(g => true);
+    }
+
+    public void Buscar()
+    {
+        prioridades = PrioridadeBLL.GetList(l => l.PrioridadId == ID);
+    }
+
+    public void Reiniciar()
+    {
+        prioridades = PrioridadeBLL.GetList(l => true);
+    }
+}

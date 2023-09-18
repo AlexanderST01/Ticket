@@ -1,0 +1,59 @@
+﻿@page "/ConsultaSistemas"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject SistemasBLL SistemaBLL
+
+<div>
+    <h3>Consulta Sistemas</h3>
+    <div class="row justify-content-start ">
+        <div class=" col-sm-5 col-md-6 col-lg-7 col-xl-xxl-8 ">
+            <div class="input-group" >
+                <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
+                <button type="button" class="btn btn-outline-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                <button type="button" class="btn btn-outline-primary oi oi-reload" @onclick="Reiniciar"></button>
+            </div>
+            <div class="table-responsive ">
+                <table border="1" class="table table-bordered table-striped ">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th>ID</th>
+                            <th>Nombre del sistema</th>                            
+                            <th>Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tabla in Sistemas)
+                        {
+                            <tr>
+                                <td>@tabla.</td>
+                                <td>@tabla.NombreSistema</td>                                
+                                <td>@tabla.Descripcion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Sistemas> Sistemas { get; set; } = new();
+
+    public int ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Sistemas = SistemaBLL.GetList(g => true);
+    }
+
+    public void Buscar()
+    {
+        Sistemas = SistemaBLL.GetList(l => l.SistemasId == ID);
+    }
+
+    public void Reiniciar()
+    {
+        Sistemas = SistemaBLL.GetList(l => true);
+    }
+}
