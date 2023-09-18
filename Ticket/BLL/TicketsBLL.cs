@@ -50,7 +50,7 @@ namespace Ticket.BLL
                 .AsNoTracking()
                 .SingleOrDefault();
         }
-        public List<Tickets>GetTickets(Expression<Func<Tickets,bool>> criterio)
+        public List<Tickets>GetList(Expression<Func<Tickets,bool>> criterio)
         {
             return _context.Tickets
                 .AsNoTracking()

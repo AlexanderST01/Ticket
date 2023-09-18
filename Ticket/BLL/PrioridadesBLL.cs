@@ -52,7 +52,7 @@ namespace Ticket.BLL
         }
         public List<Prioridades> GetList(Expression<Func<Prioridades, bool>> criterio)
         {
-            return _contextPrioridades
+            return _context.Prioridades
                 .AsNoTracking()
                 .Where(criterio)
                 .ToList();
