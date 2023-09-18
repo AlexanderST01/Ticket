@@ -1,0 +1,67 @@
+﻿@page "/ConsultaCliente"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject ClientesBLL clientesBLL
+
+<div>
+    <h3>Consulta Clientes</h3>
+    <div class="row justify-content-start ">
+        <div class=" col-sm-5 col-md-6 col-lg-7 col-xl-xxl-8 ">
+            <div class="input-group">
+                <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
+                <button type="button" class="btn btn-outline-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                <button type="button" class="btn btn-outline-primary oi oi-reload" @onclick="Reiniciar"></button>
+            </div>
+            <div class="table-responsive ">
+                <table border="1" class="table table-bordered table-striped ">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th >ID</th>
+                            <th >Nombre</th>
+                            <th >Telefono</th>
+                            <th >Celular</th>
+                            <th >Rnc</th>
+                            <th >Email</th>
+                            <th >Direccion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tabla in Clientes)
+                        {
+                            <tr>
+                                <td >@tabla.ClienteId</td>
+                                <td >@tabla.Nombre</td>
+                                <td >@tabla.Telefono</td>
+                                <td >@tabla.Celular</td>
+                                <td >@tabla.Rnc</td>
+                                <td >@tabla.Email</td>
+                                <td >@tabla.Direccion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Clientes> Clientes { get; set; } = new List<Clientes>();
+
+    public int ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Clientes = clientesBLL.GetList(g => true);
+    }
+
+    public void Buscar()
+    {
+        Clientes = clientesBLL.GetList(l => l.ClienteId == ID);
+    }
+
+    public void Reiniciar()
+    {
+        Clientes = clientesBLL.GetList(l => true);
+    }
+}
