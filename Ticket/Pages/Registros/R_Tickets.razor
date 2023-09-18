@@ -1,0 +1,155 @@
+﻿@page "/RegistroTicket"
+@page "/RegistroTicket/{TicketId:int}"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject ClientesBLL ClienteBLL
+@inject PrioridadesBLL PrioridadeBLL
+@inject SistemasBLL SistemaBLL
+@inject TicketsBLL TicketBLL
+
+<EditForm Model="Ticket" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header">
+                <h1>Registro Tickets</h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <label>TicketID:</label>
+                    <div class=" col-3">
+                        <InputNumber @bind-Value="Ticket.TicketId" class="form-control"></InputNumber>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Fecha: </label>
+                    <InputDate @bind-Value="Ticket.Fecha" class="form-control"></InputDate>
+                    <ValidationMessage For="@(() => Ticket.Fecha)" />                    
+                </div>
+                <div class="row">
+                    <label>Cliente ID:</label>
+                    <InputNumber @bind-Value="Ticket.ClienteId" class="form-control" type="email"></InputNumber>
+                    <ValidationMessage For="@(() => Ticket.ClienteId)" />
+                    @if (ClienteNoExiste)
+                    {
+                        <p class="validation-message">Este cliente aun no existe</p>
+                    }
+                </div>
+                <div class="row">
+                    <label>Sistema ID:</label>
+                    <InputNumber @bind-Value="Ticket.SistemaId" class="form-control"></InputNumber>
+                    <ValidationMessage For="@(() => Ticket.SistemaId)" />
+                    @if (SistemaNoExiste)
+                    {
+                        <p class="validation-message">Este Sistema aun no existe</p>
+                    }
+                </div>
+                <div class="row">
+                    <label>Prioridad Id:</label>
+                    <InputNumber @bind-Value="Ticket.PrioridadId" class="form-control"></InputNumber>
+                    <ValidationMessage For="@(() => Ticket.PrioridadId)" />
+                    @if (PrioridadNoExiste)
+                    {
+                        <p class="validation-message">Esta Prioridad aun no existe</p>
+                    }
+                </div>
+                <div class="row">
+                    <label>Solicitado por:</label>
+                    <InputText @bind-Value="Ticket.SolicitadoPor" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => Ticket.SolicitadoPor)" />
+                </div>                             
+                <div class="row">
+                    <label>Asunto:</label>
+                    <InputText @bind-Value="Ticket.Asunto" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => Ticket.Asunto)" />
+                </div>
+                <div class="row">
+                    <label>Descripcion:</label>
+                    <InputText @bind-Value="Ticket.Descripcion" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => Ticket.Descripcion)" />
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo <i class="oi oi-file" /></button>
+                <button class="btn btn-success">Guardar <i class="oi oi-document" /></button>
+                <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar <i class="oi oi-trash" /></button>
+            </div>
+        </div>
+    </div>
+    <ValidationSummary></ValidationSummary>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int TicketId { get; set; }
+
+    public Tickets Ticket { get; set; } = new();
+
+    public bool DecripcionRepetido = false;
+    public bool TicketIdRepetipo = false;
+    public bool ClienteNoExiste = false;
+    public bool PrioridadNoExiste = false;
+    public bool SistemaNoExiste = false;
+
+
+    protected override void OnInitialized()
+    {
+        if (TicketId > 0)
+        {
+            this.Ticket.ClienteId = TicketId;
+            this.Buscar();
+        }
+    }
+
+    void Buscar()
+    {
+        var TicketsEncontrado = TicketBLL.Buscar(Ticket.TicketId);
+        if (TicketsEncontrado != null)
+        {
+            this.Ticket = TicketsEncontrado;
+        }
+    }
+
+    void Nuevo()
+    {
+        this.Ticket = new ();
+        TicketIdRepetipo = false;
+        DecripcionRepetido = false;
+        ClienteNoExiste = false;
+        PrioridadNoExiste = false;
+        SistemaNoExiste = false;
+    }
+
+    void Guardar()
+    {
+        if (!Validar()&&TicketBLL.Guardar(Ticket))
+        {
+            this.Nuevo();
+        }
+    }
+
+    void Eliminar()
+    {
+        TicketBLL.Eliminar(this.Ticket);
+        Nuevo();
+
+    }
+
+    bool Validar()
+    {
+        DecripcionRepetido = TicketBLL.GetList(c => c.Descripcion == Ticket.Descripcion).Any(); 
+        TicketIdRepetipo = TicketBLL.GetList(c => c.TicketId == Ticket.TicketId).Any();
+        ClienteNoExiste = !(ClienteBLL.GetList(c => c.ClienteId == Ticket.ClienteId).Any());
+        SistemaNoExiste = !(SistemaBLL.GetList(c => c.SistemasId == Ticket.SistemaId).Any());
+        PrioridadNoExiste = !(PrioridadeBLL.GetList(c => c.PrioridadId == Ticket.PrioridadId).Any());
+
+        return DecripcionRepetido || TicketIdRepetipo || ClienteNoExiste || SistemaNoExiste|| PrioridadNoExiste;
+    }
+
+}
+
+
+

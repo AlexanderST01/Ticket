@@ -1,0 +1,106 @@
+﻿@page "/RegistroSistemas"
+@page "/RegistroSistemas/{SistemasId:int}"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject SistemasBLL SistemasBLL
+
+<EditForm Model="Sistema" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header">
+                <h1>Registro Sistemas</h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <label>ID:</label>
+                    <div class=" col-3">
+                        <InputNumber @bind-Value="Sistema.SistemasId" class="form-control"></InputNumber>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Nombre de sistema: </label>
+                    <InputText @bind-Value="Sistema.NombreSistema" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => Sistema.NombreSistema)" />                    
+                </div>
+                <div class="row">
+                    <label>Descripcion:</label>
+                    <InputText @bind-Value="Sistema.Descripcion" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => Sistema.Descripcion)" />
+                    @if (descripcionRepetida)
+                    {
+                        <p class="validation-message">Este nombre ya esta registrado</p>
+                    }
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo <i class="oi oi-file" /></button>
+                <button class="btn btn-success">Guardar <i class="oi oi-document" /></button>
+                <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar <i class="oi oi-trash" /></button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int SistemasId { get; set; }
+
+    public Sistemas Sistema { get; set; } = new();
+
+    bool descripcionRepetida = false;
+    bool prioridadIdRepetida = false;
+
+    protected override void OnInitialized()
+    {
+        if (SistemasId > 0)
+        {
+            this.Sistema.SistemasId = SistemasId;
+            this.Buscar();
+        }
+    }
+
+    void Buscar()
+    {
+        var SistemaEncontrado = SistemasBLL.Buscar(Sistema.SistemasId);
+        if (SistemaEncontrado != null)
+        {
+            this.Sistema = SistemaEncontrado;
+        }
+    }
+
+    void Nuevo()
+    {
+        this.Sistema = new();
+    }
+
+    void Guardar()
+    {
+        if (!Validar() && SistemasBLL.Guardar(this.Sistema))
+        {
+            this.Nuevo();
+        }
+    }
+
+    void Eliminar()
+    {
+        SistemasBLL.Eliminar(this.Sistema);
+        Nuevo();
+
+    }
+
+    bool Validar()
+    {
+        descripcionRepetida = SistemasBLL.GetList(p => p.Descripcion == Sistema.Descripcion).Any(); ;
+        prioridadIdRepetida = SistemasBLL.GetList(p => p.SistemasId == Sistema.SistemasId).Any();
+        return descripcionRepetida || prioridadIdRepetida;
+    }
+
+}
+
+
+
+

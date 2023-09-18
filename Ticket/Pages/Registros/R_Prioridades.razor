@@ -1,0 +1,106 @@
+﻿@page "/RegistroPrioridad"
+@page "/RegistroPrioridad/{PrioridadId:int}"
+@using Ticket.BLL;
+@using Ticket.Models;
+@inject PrioridadesBLL prioridadBLL
+
+<EditForm Model="Prioridad" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header">
+                <h1>Registro Prioridad</h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <label>ID:</label>
+                    <div class=" col-3">
+                        <InputNumber @bind-Value="Prioridad.PrioridadId" class="form-control"></InputNumber>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Nombre: </label>
+                    <InputText @bind-Value="Prioridad.Descripcion" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => Prioridad.Descripcion)" />
+                    @if (descripcionRepetida)
+                    {
+                        <p class="validation-message">Este nombre ya esta registrado</p>
+                    }
+                </div>
+                <div class="row">
+                    <label>Dias compromiso:</label>
+                    <InputNumber @bind-Value="Prioridad.DiasCompromiso" class="form-control"></InputNumber>
+                    <ValidationMessage For="@(() => Prioridad.DiasCompromiso)" />
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo <i class="oi oi-file" /></button>
+                <button class="btn btn-success">Guardar <i class="oi oi-document" /></button>
+                <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar <i class="oi oi-trash" /></button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int PrioridadId { get; set; }
+
+    public Prioridades Prioridad { get; set; } = new();
+
+    bool descripcionRepetida = false;
+    bool prioridadIdRepetida = false;
+
+    protected override void OnInitialized()
+    {
+        if (PrioridadId > 0)
+        {
+            this.Prioridad.PrioridadId = PrioridadId;
+            this.Buscar();
+        }
+    }
+
+    void Buscar()
+    {
+        var PrioridadEncontrado = prioridadBLL.Buscar(Prioridad.PrioridadId);
+        if (PrioridadEncontrado != null)
+        {
+            this.Prioridad = PrioridadEncontrado;
+        }
+    }
+
+    void Nuevo()
+    {
+        this.Prioridad = new ();
+    }
+
+    void Guardar()
+    {
+        if (!Validar() && prioridadBLL.Guardar(this.Prioridad))
+        {
+            this.Nuevo();
+        }
+    }
+
+    void Eliminar()
+    {
+        prioridadBLL.Eliminar(this.Prioridad);
+        Nuevo();
+
+    }
+
+    bool Validar()
+    {
+        descripcionRepetida = prioridadBLL.GetList(p => p.Descripcion == Prioridad.Descripcion).Any(); ;
+        prioridadIdRepetida = prioridadBLL.GetList(p => p.PrioridadId == Prioridad.PrioridadId).Any();
+        return descripcionRepetida || prioridadIdRepetida;
+    }
+
+}
+
+
+
+
