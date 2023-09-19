@@ -25,13 +25,21 @@ namespace Ticket.Models
         public Prioridades Prioridades { get; set; }
 
         [Required(ErrorMessage ="EL campo Solicitado es requerido")]
+        [StringLength(50, ErrorMessage = "El compo Solicitado por supera los 50 caracteres")]
         public string? SolicitadoPor { get; set; }
 
         [Required(ErrorMessage = "EL campo Asunto es requerido")]
+        [StringLength(100, ErrorMessage = "El compo Asunto supera los 100 caracteres")]
         public string? Asunto { get; set; }
 
         [Required(ErrorMessage = "EL campo Descripcion es requerido")]
+        [StringLength(100, ErrorMessage = "El compo Decripción supera los 100 caracteres")]
         public string? Descripcion { get; set; }
+
+
+
+
+
 
     }
 }
