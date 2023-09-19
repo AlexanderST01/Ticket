@@ -26,7 +26,7 @@ namespace Ticket.BLL
         public bool Modificar(Clientes cliente)
         {
             _context.Entry(_context.Clientes.Find(cliente.ClienteId)!)
-            .State = EntityState.Modified;
+            .State = EntityState.Detached;
             _context.Entry(cliente).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
         }

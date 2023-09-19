@@ -25,7 +25,7 @@ namespace Ticket.BLL
         public bool Modificar(Prioridades prioridad)
         {
             _context.Entry(_context.Prioridades.Find(prioridad.PrioridadId)!)
-            .State = EntityState.Modified;
+            .State = EntityState.Detached;
             _context.Entry(prioridad).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
         }

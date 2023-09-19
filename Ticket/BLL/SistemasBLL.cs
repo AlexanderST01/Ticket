@@ -25,7 +25,7 @@ namespace Ticket.BLL
         public bool Modificar(Sistemas sistemas)
         {
             _context.Entry(_context.Sistemas.Find(sistemas.SistemasId)!)
-            .State = EntityState.Modified;
+            .State = EntityState.Detached;
             _context.Entry(sistemas).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
         }

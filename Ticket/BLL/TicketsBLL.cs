@@ -25,7 +25,8 @@ namespace Ticket.BLL
         }
         public bool Modificar(Tickets tickets)
         {
-            _context.Entry(_context.Tickets.Find(tickets.TicketId)!).State = EntityState.Modified;
+            _context.Entry(_context.Tickets.Find(tickets.TicketId)!)
+            .State = EntityState.Detached;
             _context.Entry(tickets).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
         }
