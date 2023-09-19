@@ -4,66 +4,100 @@
 @inject TicketsBLL TicketBLL
 
 <div>
-    <h3>Consulta Tickets</h3>
     <div class="row justify-content-start ">
         <div class=" col-sm-7 col-md-7 col-lg-10 col-xl-xxl-9 ">
-            <div class="input-group" >
-                <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
-                <button type="button" class="btn btn-outline-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
-                <button type="button" class="btn btn-outline-primary oi oi-reload" @onclick="Reiniciar"></button>
-            </div>
-            <div class="table-responsive ">
-                <table border="1" class="table table-bordered table-striped ">
-                    <thead>
-                        <tr class="table-secondary">
-                            <th scope="col">ID</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Cliente ID</th>
-                            <th scope="col">Sistema ID</th>
-                            <th scope="col">Prioridad ID</th>
-                            <th scope="col">Solicitado por</th>
-                            <th scope="col">Asunto</th>
-                            <th scope="col">Descripcion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var tabla in Ticket)
-                        {
-                            <tr>
-                                <td scope="row">@tabla.TicketId</td>
-                                <td scope="row">@tabla.Fecha.Day/@tabla.Fecha.Month/@tabla.Fecha.Year</td>
-                                <td scope="row"><a href="RegistroCliente/@tabla.ClienteId"></a>@tabla.ClienteId</td>
-                                <td scope="row">@tabla.SistemaId</td>
-                                <td scope="row">@tabla.PrioridadId</td>
-                                <td scope="row">@tabla.SolicitadoPor</td>
-                                <td scope="row">@tabla.Asunto</td>
-                                <td scope="row">@tabla.Descripcion</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <div class="card">
+                <div class="card-header">
+                    <h1>Consulta Tickets</h1>
+                    <div class="row">
+                        <div class="col">
+                            <label>Desde: </label>
+                            <InputDate @bind-Value="Desde" class="form-control "></InputDate>
+                        </div>
+                        <div class="col">
+                            <label>Hasta: </label>
+                            <InputDate @bind-Value="Hasta" class="form-control "></InputDate>
+                        </div>
+                        <div class="input-group">
+                            <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
+                            <button type="button" class="btn btn-outline-info oi oi-magnifying-glass" @onclick="Buscar"></button>
+                            <button type="button" class="btn btn-outline-info oi oi-reload" @onclick="Reiniciar"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive ">
+                        <table border="1" class="table table-bordered table-striped ">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente ID</th>
+                                    <th>Sistema ID</th>
+                                    <th>Prioridad ID</th>
+                                    <th>Solicitado por</th>
+                                    <th>Asunto</th>
+                                    <th>Descripcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var tabla in Ticket)
+                                {
+                                    <tr>
+                                        <td>@tabla.TicketId</td>
+                                        <td>@tabla.Fecha.ToString("dd/MM/yyyy")</td>
+                                        <td><a href="RegistroCliente/@tabla.ClienteId">@tabla.ClienteId</a></td>
+                                        <td>@tabla.SistemaId</td>
+                                        <td>@tabla.PrioridadId</td>
+                                        <td>@tabla.SolicitadoPor</td>
+                                        <td>@tabla.Asunto</td>
+                                        <td>@tabla.Descripcion</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
 
 @code {
     public List<Tickets> Ticket { get; set; } = new List<Tickets>();
 
     public int ID { get; set; }
 
+    public DateTime Desde { get; set; }
+    public DateTime Hasta { get; set; }
+
     protected override void OnInitialized()
     {
-        Ticket = TicketBLL.GetList(g => true);
+        Ticket = TicketBLL.GetList(t => true);
+        Desde = DateTime.Now.AddMonths(-1);
+        Hasta = DateTime.Now;
     }
 
     public void Buscar()
     {
-        Ticket = TicketBLL.GetList(l => l.ClienteId == ID);
+        if (ID > 0)
+            Ticket = TicketBLL.GetList(t => t.ClienteId == ID && t.Fecha >= Desde.Date && t.Fecha <= Hasta);
+
+        else
+            Ticket = TicketBLL.GetList(t => t.Fecha >= Desde.Date && t.Fecha <= Hasta);
+
     }
 
     public void Reiniciar()
     {
-        Ticket = TicketBLL.GetList(l => true);
+        Ticket = TicketBLL.GetList(t => true);
     }
 }

@@ -94,8 +94,8 @@
 
     bool Validar()
     {
-        descripcionRepetida = SistemasBLL.GetList(p => p.Descripcion == Sistema.Descripcion).Any(); ;
-        prioridadIdRepetida = SistemasBLL.GetList(p => p.SistemasId == Sistema.SistemasId).Any();
+        descripcionRepetida = SistemasBLL.GetList(s => s.Descripcion == Sistema.Descripcion && s.SistemasId != Sistema.SistemasId).Any();
+        prioridadIdRepetida = SistemasBLL.GetList(s => s.SistemasId == Sistema.SistemasId && s.SistemasId != Sistema.SistemasId).Any();
         return descripcionRepetida || prioridadIdRepetida;
     }
 

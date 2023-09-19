@@ -105,6 +105,7 @@ namespace Ticket.Migrations
 
                     b.Property<string>("Asunto")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ClienteId")
@@ -112,6 +113,7 @@ namespace Ticket.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Fecha")
@@ -125,6 +127,7 @@ namespace Ticket.Migrations
 
                     b.Property<string>("SolicitadoPor")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("TicketId");

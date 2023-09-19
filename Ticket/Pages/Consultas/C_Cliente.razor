@@ -4,14 +4,24 @@
 @inject ClientesBLL clientesBLL
 
 <div>
-    <h3>Consulta Clientes</h3>
+
+    
+
+
+
+    
     <div class="row justify-content-start ">
-        <div class=" col-sm-5 col-md-6 col-lg-7 col-xl-xxl-8 ">
+        <div class=" col-sm-10 col-md-9 col-lg-10 col-xl-xxl-7 ">
+                  <div class="card">
+        <div class="card-header">
+            <h1>Consulta Clientes</h1>
             <div class="input-group">
                 <InputNumber @bind-Value="ID" class="form-control"></InputNumber>
                 <button type="button" class="btn btn-outline-primary oi oi-magnifying-glass" @onclick="Buscar"></button>
                 <button type="button" class="btn btn-outline-primary oi oi-reload" @onclick="Reiniciar"></button>
             </div>
+        </div>
+        <div class="card-body">
             <div class="table-responsive ">
                 <table border="1" class="table table-bordered table-striped ">
                     <thead>
@@ -29,7 +39,7 @@
                         @foreach (var tabla in Clientes)
                         {
                             <tr>
-                                <td >@tabla.ClienteId</td>
+                                <td><a href="Registro/@tabla.ClienteId"></a>@tabla.ClienteId</td>
                                 <td >@tabla.Nombre</td>
                                 <td >@tabla.Telefono</td>
                                 <td >@tabla.Celular</td>
@@ -43,6 +53,9 @@
             </div>
         </div>
     </div>
+            
+        </div>
+    </div>
 </div>
 
 @code {
@@ -52,16 +65,16 @@
 
     protected override void OnInitialized()
     {
-        Clientes = clientesBLL.GetList(g => true);
+        Clientes = clientesBLL.GetList(c => true);
     }
 
     public void Buscar()
     {
-        Clientes = clientesBLL.GetList(l => l.ClienteId == ID);
+        Clientes = clientesBLL.GetList(c => c.ClienteId == ID);
     }
 
     public void Reiniciar()
     {
-        Clientes = clientesBLL.GetList(l => true);
+        Clientes = clientesBLL.GetList(c => true);
     }
 }

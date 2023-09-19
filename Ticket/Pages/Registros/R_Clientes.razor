@@ -123,8 +123,11 @@
 
     bool  Validar()
     {
-        nombreRepetido = clienteBLL.GetList(c => c.Nombre == cliente.Nombre).Any();
-        RncRepetido = clienteBLL.GetList(c => c.Rnc == cliente.Rnc).Any();
+        //var ClientesNombres = ClienteBLL.GetList(c => c.Nombre == cliente.Nombre && c.ClienteId != cliente.ClienteId).Any();
+        //var ClientesRnc = ClienteBLL.GetList(c => c.Rnc == cliente.Rnc && c.ClienteId != cliente.ClienteId).Any();
+
+        nombreRepetido = clienteBLL.GetList(c => c.Nombre == cliente.Nombre && c.ClienteId != cliente.ClienteId).Any();
+        RncRepetido = clienteBLL.GetList(c => c.Rnc == cliente.Rnc && c.ClienteId != cliente.ClienteId).Any();
         return nombreRepetido || RncRepetido;
     }
         

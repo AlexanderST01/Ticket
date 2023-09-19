@@ -94,8 +94,8 @@
 
     bool Validar()
     {
-        descripcionRepetida = prioridadBLL.GetList(p => p.Descripcion == Prioridad.Descripcion).Any(); ;
-        prioridadIdRepetida = prioridadBLL.GetList(p => p.PrioridadId == Prioridad.PrioridadId).Any();
+        descripcionRepetida = prioridadBLL.GetList(p => p.Descripcion == Prioridad.Descripcion && p.PrioridadId != Prioridad.PrioridadId).Any(); ;
+        prioridadIdRepetida = prioridadBLL.GetList(p => p.PrioridadId == Prioridad.PrioridadId && p.PrioridadId != Prioridad.PrioridadId).Any();
         return descripcionRepetida || prioridadIdRepetida;
     }
 

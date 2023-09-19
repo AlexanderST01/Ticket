@@ -87,8 +87,9 @@
     public int TicketId { get; set; }
 
     public Tickets Ticket { get; set; } = new();
-
+    //creo que lo que esta comentado esta de mas, esto incluye a descripcionRepetido
     public bool DecripcionRepetido = false;
+    //public bool AsuntoRepetido = false;
     public bool TicketIdRepetipo = false;
     public bool ClienteNoExiste = false;
     public bool PrioridadNoExiste = false;
@@ -117,7 +118,7 @@
     {
         this.Ticket = new ();
         TicketIdRepetipo = false;
-        DecripcionRepetido = false;
+        //DecripcionRepetido = false;
         ClienteNoExiste = false;
         PrioridadNoExiste = false;
         SistemaNoExiste = false;
@@ -140,8 +141,9 @@
 
     bool Validar()
     {
-        DecripcionRepetido = TicketBLL.GetList(c => c.Descripcion == Ticket.Descripcion).Any(); 
-        TicketIdRepetipo = TicketBLL.GetList(c => c.TicketId == Ticket.TicketId).Any();
+        DecripcionRepetido = TicketBLL.GetList(c => c.Descripcion == Ticket.Descripcion && c.TicketId != Ticket.TicketId).Any();
+        //agregar validadcion para asunto
+        //TicketIdRepetipo = TicketBLL.GetList(c => c.TicketId == Ticket.TicketId).Any();
         ClienteNoExiste = !(ClienteBLL.GetList(c => c.ClienteId == Ticket.ClienteId).Any());
         SistemaNoExiste = !(SistemaBLL.GetList(c => c.SistemasId == Ticket.SistemaId).Any());
         PrioridadNoExiste = !(PrioridadeBLL.GetList(c => c.PrioridadId == Ticket.PrioridadId).Any());

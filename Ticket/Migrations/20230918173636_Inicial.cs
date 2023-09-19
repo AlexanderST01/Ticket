@@ -67,9 +67,9 @@ namespace Ticket.Migrations
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     SistemaId = table.Column<int>(type: "INTEGER", nullable: false),
                     PrioridadId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SolicitadoPor = table.Column<string>(type: "TEXT", nullable: false),
-                    Asunto = table.Column<string>(type: "TEXT", nullable: false),
-                    Descripcion = table.Column<string>(type: "TEXT", nullable: false)
+                    SolicitadoPor = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Asunto = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
