@@ -41,11 +41,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var tabla in Ticket)
+                                @foreach (var tabla in tickets)
                                 {
                                     <tr>
                                         <td>@tabla.TicketId</td>
-                                        <td>@tabla.Fecha.ToString("dd/MM/yyyy")</td>
+                                        <td>@tabla.Fecha.ToString("MM/dd/yyyy")</td>
                                         <td><a href="RegistroCliente/@tabla.ClienteId">@tabla.ClienteId</a></td>
                                         <td>@tabla.SistemaId</td>
                                         <td>@tabla.PrioridadId</td>
@@ -63,16 +63,8 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-
 @code {
-    public List<Tickets> Ticket { get; set; } = new List<Tickets>();
+    public List<Tickets> tickets { get; set; } = new List<Tickets>();
 
     public int ID { get; set; }
 
@@ -81,7 +73,7 @@
 
     protected override void OnInitialized()
     {
-        Ticket = TicketBLL.GetList(t => true);
+        tickets = TicketBLL.GetList(t => true);
         Desde = DateTime.Now.AddMonths(-1);
         Hasta = DateTime.Now;
     }
@@ -89,15 +81,15 @@
     public void Buscar()
     {
         if (ID > 0)
-            Ticket = TicketBLL.GetList(t => t.ClienteId == ID && t.Fecha >= Desde.Date && t.Fecha <= Hasta);
+            tickets = TicketBLL.GetList(t => t.ClienteId == ID && t.Fecha >= Desde.Date && t.Fecha <= Hasta);
 
         else
-            Ticket = TicketBLL.GetList(t => t.Fecha >= Desde.Date && t.Fecha <= Hasta);
+            tickets = TicketBLL.GetList(t => t.Fecha >= Desde.Date && t.Fecha <= Hasta);
 
     }
 
     public void Reiniciar()
     {
-        Ticket = TicketBLL.GetList(t => true);
+        tickets = TicketBLL.GetList(t => true);
     }
 }
