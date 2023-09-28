@@ -8,8 +8,8 @@ namespace Ticket.Models
         [Key]
         public int TicketId { get; set; }
 
-        [Required (ErrorMessage ="El compo Fecha es requerido")]
-        public DateTime Fecha { get; set; }
+        [Required(ErrorMessage = "El compo Fecha es requerido")]
+        public DateTime Fecha { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "El campo Cliente ID  es requerido")]
         public int ClienteId { get; set; }
